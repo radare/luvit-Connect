@@ -59,9 +59,10 @@ function server.use(s, h)
 	return s
 end
 
-function server.listen(s, port)
+function server.listen(s, port, host)
+	if not host then host = "0.0.0.0" end
 	print ("luvit-Connect listening on port "..port)
-	HTTP.create_server ("0.0.0.0", port, function (req, res)
+	HTTP.create_server (host, port, function (req, res)
 		local app = s.app
 		app.server = s
 		app.req = req
