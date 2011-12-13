@@ -1,0 +1,6 @@
+-- TODO --
+
+Support nested tables
+
+require('qs').parse('user[name][first]=tj&user[email]=tj');
+// => { user: { name: { first: 'tj' }, email: 'tj' } }
