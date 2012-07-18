@@ -62,27 +62,28 @@ end
 function server.listen(s, port, host)
 	if not host then host = "0.0.0.0" end
 	print ("luvit-Connect listening on port "..port)
-	HTTP.create_server (host, port, function (req, res)
+	HTTP.createServer (function (req, res)
 		local app = s.app
 		app.server = s
 		app.req = req
 		app.res = res
 		--- xxx not async or wtf
 		app.handled = false
+		req.method = req.method:lower()
 		for i=1, #s.handlers do
 			s.handlers[i] (app)
 		end
 		-- 404 --
 		if not app.handled then
 			local body = "<html><h1>404: resource not found</h1></html>"
-			res:write_head (404, {
+			res:writeHead (404, {
 				["Content-Type"] = "text/html",
 				["Content-Length"] = #body
 			})
 			res:finish (body)
 		end
 		
-	end)
+	end):listen(port, host)
 end
 
 function server.router(fn)
